@@ -8,6 +8,16 @@
     </head>
 
     <body>
+
+        <select id="colorSelector" onchange="changeColor(this.value)">
+            <option value="">Colour</option>
+            <option value="auto">Auto</option>
+            <option value="blue">Blue</option>
+            <option value="green">Green</option>
+            <option value="red">Red</option>
+        </select>
+
+
         <script>
             // Define an array of colors, one for each time of day
             const colors = [
@@ -34,6 +44,14 @@
             function getColor() {
                 const hour = new Date().getHours(); // get current hour
                 return colors[hour]; // return the corresponding color
+            }
+
+            function changeColor(value) {
+                if (value === 'auto') {
+                    document.body.style.backgroundColor = getColor();
+                } else {
+                    document.body.style.backgroundColor = value;
+                }
             }
 
             // set the background color initially
