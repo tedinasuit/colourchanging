@@ -1,66 +1,36 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>
-            Colour
-        </title>
-        <link rel="stylesheet" type="text/css" href="style/style.css">
-    </head>
+  <head>
+    <title>Colour</title>
+    <link rel="stylesheet" type="text/css" href="style/style.css">
+  </head>
+  <body>
+    <select onchange="color(this.value)">
+      <option value="">Auto</option>
+      <option value="blue">Blue</option>
+      <option value="green">Green</option>
+      <option value="red">Red</option>
+    </select>
 
-    <body>
+    <a href="colour-settings.html">Colour Settings</a>
 
-        <select id="colorSelector" onchange="changeColor(this.value)">
-            <option value="">Colour</option>
-            <option value="auto">Auto</option>
-            <option value="blue">Blue</option>
-            <option value="green">Green</option>
-            <option value="red">Red</option>
-        </select>
+    <script>
+      function color(value) {
+        document.body.style.backgroundColor = value;
+      }
 
+      function updateBackgroundColor() {
+        const hourColors = JSON.parse(localStorage.getItem('hourColors'));
+        if (!hourColors) {
+          return;
+        }
+        const now = new Date();
+        const currentHour = now.getHours();
+        const currentColor = hourColors[currentHour];
+        document.body.style.backgroundColor = currentColor;
+      }
 
-        <script>
-            // Define an array of colors, one for each time of day
-            const colors = [
-                '#000000', // midnight to 1am
-                '#000000', // 1am to 2am
-                '#000000', // 2am to 3am
-                '#000000', // 3am to 4am
-                '#000000', // 4am to 5am
-                '#000000', // 5am to 6am
-                '#000000', // 6am to 7am
-                'blue', // 7am to 8am
-                'blue', // 8am to 9am
-                'blue', // 9am to 10am
-                'blue', // 10am to 11am
-                'blue', // 11am to 12pm
-                'green', // 12pm to 1pm
-                'lightblue', // 1pm to 2pm
-                'lightblue', // 2pm to 3pm
-                'green', // 3pm to 4pm
-                'green', // 4pm to 5pm
-                'green', // 5pm to 6pm
-            ];
-
-            function getColor() {
-                const hour = new Date().getHours(); // get current hour
-                return colors[hour]; // return the corresponding color
-            }
-
-            function changeColor(value) {
-                if (value === 'auto') {
-                    document.body.style.backgroundColor = getColor();
-                } else {
-                    document.body.style.backgroundColor = value;
-                }
-            }
-
-            // set the background color initially
-            document.body.style.backgroundColor = getColor();
-
-            // update the background color every minute
-            setInterval(() => {
-                document.body.style.backgroundColor = getColor();
-            }, 60000); // 60000 milliseconds = 1 minute
-        </script>
-    </body>
+      updateBackgroundColor();
+    </script>
+  </body>
 </html>
