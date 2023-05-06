@@ -49,3 +49,9 @@ body {
     background-color: #555;
   }
 
+  #main-btn {
+    position: absolute;
+    left: 47.5%;
+    margin-top: 20px;
+  }
+

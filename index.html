@@ -12,11 +12,15 @@
       <option value="red">Red</option>
     </select>
 
-    <a href="colour-settings.html">Colour Settings</a>
+    <a id="cs-btn" href="colour-settings.html">Colour Settings</a>
 
     <script>
       function color(value) {
-        document.body.style.backgroundColor = value;
+        if (value === '') {
+          updateBackgroundColor();
+        } else {
+          document.body.style.backgroundColor = value;
+        }
       }
 
       function updateBackgroundColor() {

@@ -58,7 +58,7 @@
         <input type="color" id="hour-23" value="">
       </div>
       <button type="submit">Save</button>
-      <a href="index.html">Back to main</a>
+      <a id="main-btn" href="index.html">Back to main</a>
     </form>
     <script>
       const colorForm = document.getElementById('color-form');
@@ -83,8 +83,6 @@
         const currentColor = hourColors[currentHour];
         document.body.style.backgroundColor = currentColor;
       }
-
-      updateBackgroundColor();
     </script>
   </body>
 </html>
