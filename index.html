@@ -3,13 +3,14 @@
   <head>
     <title>Colour</title>
     <link rel="stylesheet" type="text/css" href="style/style.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script> 
   </head>
   <body>
     <select onchange="color(this.value)">
       <option value="">Auto</option>
-      <option value="blue">Blue</option>
-      <option value="green">Green</option>
-      <option value="red">Red</option>
+      <option value="#3944BC">Blue</option>
+      <option value="#378308">Green</option>
+      <option value="#C30010">Red</option>
     </select>
 
     <a id="cs-btn" href="colour-settings.html">Colour Settings</a>
@@ -21,6 +22,7 @@
         } else {
           document.body.style.backgroundColor = value;
         }
+        updateHueColor(value); 
       }
 
       function updateBackgroundColor() {
@@ -33,6 +35,43 @@
         const currentColor = hourColors[currentHour];
         document.body.style.backgroundColor = currentColor;
       }
+
+      function updateHueColor(color) {
+
+      const hueBridgeIP = '192.168.178.17';
+      const username = 'aMzAUrHbPTUJJUuaaDsoLXyYrCIVF6yZDGZRTVHb';
+
+      // The ID of the Hue light I want to control
+      const lightId = '4';
+
+      // Convert the color to the Hue API format (e.g., #RRGGBB to xy)
+      const xyColor = hexToXy(color);
+
+      // Make a PUT request to the Hue API to update the light's color
+      axios.put(`http://${hueBridgeIP}/api/${username}/lights/${lightId}/state`, {
+        xy: xyColor,
+      })
+      .then(response => {
+        console.log('Hue API response:', response.data);
+      })
+      .catch(error => {
+        console.error('Hue API error:', error);
+      });
+    }
+
+    // Helper function to convert hex color to xy color
+    function hexToXy(color) {
+      const hex = color.replace('#', '');
+      const r = parseInt(hex.substring(0, 2), 16) / 255;
+      const g = parseInt(hex.substring(2, 4), 16) / 255;
+      const b = parseInt(hex.substring(4, 6), 16) / 255;
+
+      const x = (r * 0.649926 + g * 0.103455 + b * 0.197109) / (r + g + b);
+      const y = (r * 0.234327 + g * 0.743075 + b * 0.022598) / (r + g + b);
+
+      return [x, y];
+    }
+
 
       updateBackgroundColor();
       console.log("updated!");
