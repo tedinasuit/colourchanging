@@ -7,7 +7,7 @@
   </head>
   <body>
     <select onchange="color(this.value)">
-      <option value="">Auto</option>
+      <option value="auto">Auto</option>
       <option value="#3944BC">Blue</option>
       <option value="#378308">Green</option>
       <option value="#C30010">Red</option>
@@ -16,12 +16,18 @@
     <a id="cs-btn" href="colour-settings.html">Colour Settings</a>
 
     <script>
+      let mode = 'auto';
+      
       function color(value) {
-        if (value === '') {
+        if (value === 'auto') {
+          mode = 'auto';
           updateBackgroundColor();
+          updateHueAutoColor();
         } else {
+          mode = 'preset';
           document.body.style.backgroundColor = value;
         }
+        mode = 'preset';
         updateHueColor(value); 
       }
 
@@ -30,10 +36,15 @@
         if (!hourColors) {
           return;
         }
+        if (mode !== 'auto') {
+          return;
+        }
         const now = new Date();
         const currentHour = now.getHours();
         const currentColor = hourColors[currentHour];
+        
         document.body.style.backgroundColor = currentColor;
+        console.log(currentColor);
       }
 
       function updateHueColor(color) {
@@ -59,6 +70,44 @@
       });
     }
 
+
+    function updateHueAutoColor(color) {
+      if (mode !== 'auto') {
+          return;
+        }
+
+    const hueBridgeIP = '192.168.178.17';
+    const username = 'aMzAUrHbPTUJJUuaaDsoLXyYrCIVF6yZDGZRTVHb';
+
+    // The ID of the Hue light I want to control
+    const lightId = '4';
+
+    const hourColors = JSON.parse(localStorage.getItem('hourColors'));
+        if (!hourColors) {
+          return;
+        }
+        const now = new Date();
+        const currentHour = now.getHours();
+        const currentColor = hourColors[currentHour];
+
+    // Convert the color to the Hue API format (e.g., #RRGGBB to xy)
+    const xyColor = hexToXy(currentColor);
+
+    if (mode !== 'auto') {
+          return;
+        }
+    // Make a PUT request to the Hue API to update the light's color
+    axios.put(`http://${hueBridgeIP}/api/${username}/lights/${lightId}/state`, {
+      xy: xyColor,
+    })
+    .then(response => {
+      console.log('Hue API response:', response.data);
+    })
+    .catch(error => {
+      console.error('Hue API error:', error);
+    });
+    }
+
     // Helper function to convert hex color to xy color
     function hexToXy(color) {
       const hex = color.replace('#', '');
@@ -73,9 +122,11 @@
     }
 
 
-      updateBackgroundColor();
+    updateBackgroundColor();
+    updateHueAutoColor();
       console.log("updated!");
-      setInterval(updateBackgroundColor, 60 * 1000);
+      setInterval(updateBackgroundColor, 2 * 1000);
+      setInterval(updateHueAutoColor, 2 * 1000);
       console.log("interval!");
     </script>
   </body>
