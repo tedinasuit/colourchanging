@@ -31,4 +31,16 @@ The web application relies on the following dependencies:
 
 - The IP address of the Hue Bridge, API token, and light ID are hardcoded in the JavaScript code. Modify them according to your Hue Bridge setup.
 
+`index.html`:
+```
+      let mode = 'auto';
+      // The IP of the Hue Bridge I want to connect to
+      const hueBridgeIP = '192.168.178.17';
+      // The API token of the Hue Bridge
+      const username = 'aMzAUrHbPTUJJUuaaDsoLXyYrCIVF6yZDGZRTVHb';
+      // The ID of the Hue light I want to control
+      const lightId = '4';
+
+```
+
 Feel free to explore the code and customize it as needed!
